@@ -19,7 +19,7 @@ import com.mx.Doctores.dto.DoctorResponseDTO;
 import com.mx.Doctores.service.DoctorService;
 
 import jakarta.validation.Valid;
-
+import org.springframework.web.bind.annotation.RequestParam;
 @RestController
 @RequestMapping("doctores")
 public class DoctorController {
@@ -63,4 +63,12 @@ public class DoctorController {
         doctorService.eliminar(id);
         return ResponseEntity.noContent().build(); // Devuelve 204 No Content
     }
+    
+
+    @PostMapping("/{id}/estatus")
+    public ResponseEntity<Void> actualizarEstatus(@PathVariable Integer id, @RequestParam String estatus) {
+        doctorService.actualizarEstatus(id, estatus);
+        return ResponseEntity.ok().build();
+    }
+    
 }

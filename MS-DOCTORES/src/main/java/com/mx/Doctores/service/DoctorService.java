@@ -17,13 +17,16 @@ import com.mx.Doctores.exception.DoctorNotFoundException;
 @Service
 public class DoctorService {
 
-    @Autowired
     private IDoctorDao doctorDao;
 
-    @Autowired
     private ModelMapper modelMapper;
+    
+    public DoctorService(IDoctorDao doctorDao, ModelMapper modelMapper) {
+		this.doctorDao = doctorDao;
+		this.modelMapper = modelMapper;
+	}
 
-    // Listar todos los doctores 
+	// Listar todos los doctores 
     public List<DoctorResponseDTO> listarTodos() {
         return doctorDao.findAll().stream()
                 .map(doctor -> modelMapper.map(doctor, DoctorResponseDTO.class))
@@ -79,5 +82,19 @@ public class DoctorService {
             throw new DoctorNotFoundException("No se puede eliminar, el ID: " + id + " no existe.");
         }
         doctorDao.deleteById(id);
+    }
+    
+
+    public void actualizarEstatus(Integer id, String estatus) {
+        // 1. Buscar la entidad
+        com.mx.Doctores.entity.Doctor entidad = doctorDao.findById(id)
+            .orElseThrow(() -> new RuntimeException("Doctor no encontrado"));
+            
+        // 2. CONVERSIÓN: Convertimos el String a Enum antes de setearlo
+        // Reemplaza "Estatus" por el nombre exacto de tu clase Enum (ej. EstatusDoctor)
+        entidad.setEstatus(Estatus.valueOf(estatus.toUpperCase()));
+        
+        // 3. Guardar cambios
+        doctorDao.save(entidad);
     }
 }
