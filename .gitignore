@@ -3,3 +3,6 @@ bin/
 target/
 *.log
 *.lock
+*.db
+*.mv.db
+*.trace.db
